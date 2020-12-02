@@ -1,7 +1,10 @@
 import { ApolloError, gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
+import nuberLogo from "../images/logo.svg";
 import {
   loginMutation,
   loginMutationVariables,
@@ -10,7 +13,6 @@ import {
 interface ILoginForm {
   email: string;
   password: string;
-  resultError?: string;
 }
 
 const MIN_PASSWORD_LEN = 10;
@@ -26,7 +28,13 @@ const LOGIN_MUTATION = gql`
 `;
 
 export const Login = () => {
-  const { register, getValues, handleSubmit, errors } = useForm<ILoginForm>();
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    errors,
+    formState,
+  } = useForm<ILoginForm>({ mode: "onChange" });
   const onCompleted = (data: loginMutation) => {
     const {
       login: { ok, token },
@@ -56,16 +64,19 @@ export const Login = () => {
     }
   };
   const onInvalid = () => {
-    console.log("cant create account");
+    console.log("cant login");
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-800">
-      <div className="bg-white w-full max-w-lg pt-10 pb-7 rounded-lg text-center">
-        <h3 className="text-2xl text-gray-800">Log In</h3>
+    <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
+      <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
+        <img alt="logo" src={nuberLogo} className="w-52 mb-10" />
+        <h4 className="w-full font-medium text-left text-3xl mb-5">
+          Welcome back
+        </h4>
         <form
           onSubmit={handleSubmit(onSubmit, onInvalid)}
-          className="grid gap-3 mt-5 px-5"
+          className="grid gap-3 mt-5 w-full mb-5"
         >
           <div>
             <input
@@ -74,7 +85,6 @@ export const Login = () => {
               })}
               name="email"
               type="email"
-              required
               placeholder="Email"
               className="input"
             />
@@ -90,7 +100,6 @@ export const Login = () => {
               })}
               name="password"
               type="password"
-              required
               placeholder="Password"
               className="input"
             />
@@ -103,13 +112,21 @@ export const Login = () => {
               errorMessage={`Password must be more than ${MIN_PASSWORD_LEN} chars.`}
             />
           )}
-          <button className="mt-3 btn">
-            {loading ? "Loading..." : "Log In"}
-          </button>
+          <Button
+            canClick={formState.isValid}
+            loading={loading}
+            actionText="Login"
+          />
           {loginMutationResult?.login.error && (
             <FormError errorMessage={loginMutationResult.login.error} />
           )}
         </form>
+        <div>
+          New to Nuber?{" "}
+          <Link to="/create-account" className="text-lime-600 hover:underline">
+            Create an Account
+          </Link>
+        </div>
       </div>
     </div>
   );
