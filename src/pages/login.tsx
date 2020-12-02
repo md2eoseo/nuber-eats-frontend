@@ -1,9 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { FormError } from "../components/form-error";
 
 interface ILoginForm {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 const MIN_PASSWORD_LEN = 10;
@@ -27,7 +28,7 @@ export const Login = () => {
         <div>
           <input
             ref={register({
-              required: "This is required",
+              required: "Email is required",
             })}
             name="email"
             type="email"
@@ -35,12 +36,10 @@ export const Login = () => {
             placeholder="Email"
             className="input"
           />
-          {errors.email?.message && (
-            <span className="font-medium text-red-500">
-              {errors.email?.message}
-            </span>
-          )}
         </div>
+        {errors.email?.message && (
+          <FormError errorMessage={errors.email?.message} />
+        )}
         <div>
           <input
             ref={register({
@@ -55,14 +54,12 @@ export const Login = () => {
           />
         </div>
         {errors.password?.message && (
-          <span className="font-medium text-red-500">
-            {errors.password?.message}
-          </span>
+          <FormError errorMessage={errors.password?.message} />
         )}
         {errors.password?.type === "minLength" && (
-          <span className="font-medium text-red-500">
-            Password must be more than {MIN_PASSWORD_LEN} chars.
-          </span>
+          <FormError
+            errorMessage={`Password must be more than ${MIN_PASSWORD_LEN} chars.`}
+          />
         )}
         <button className="mt-3 btn">Log In</button>
       </form>
