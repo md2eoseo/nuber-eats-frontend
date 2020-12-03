@@ -1,6 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { isLoggedInVar } from "../apollo";
+import { authTokenVar, isLoggedInVar } from "../apollo";
+import { LOCALSTORAGE_TOKEN } from "../constants";
 import { meQuery } from "../__generated__/meQuery";
 
 const ME_QUERY = gql`
@@ -26,6 +27,16 @@ export const LoggedInRouter = () => {
   return (
     <div>
       <h1>{data.me.email}</h1>
+      <button
+        className="btn"
+        onClick={() => {
+          localStorage.removeItem(LOCALSTORAGE_TOKEN);
+          isLoggedInVar(false);
+          authTokenVar();
+        }}
+      >
+        logout
+      </button>
     </div>
   );
 };
