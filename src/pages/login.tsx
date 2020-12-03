@@ -1,7 +1,9 @@
 import { ApolloError, gql, useMutation } from "@apollo/client";
 import React from "react";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { isLoggedInVar } from "../apollo";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import nuberLogo from "../images/logo.svg";
@@ -14,8 +16,6 @@ interface ILoginForm {
   email: string;
   password: string;
 }
-
-const MIN_PASSWORD_LEN = 10;
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
@@ -41,6 +41,7 @@ export const Login = () => {
     } = data;
     if (ok) {
       console.log(token);
+      isLoggedInVar(true);
     }
   };
   const onError = (error: ApolloError) => {
@@ -69,6 +70,9 @@ export const Login = () => {
 
   return (
     <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
+      <Helmet>
+        <title>Login | Nuber Eats</title>
+      </Helmet>
       <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
         <img alt="logo" src={nuberLogo} className="w-52 mb-10" />
         <h4 className="w-full font-medium text-left text-3xl mb-5">
@@ -82,6 +86,7 @@ export const Login = () => {
             <input
               ref={register({
                 required: "Email is required",
+                pattern: /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
               })}
               name="email"
               type="email"
@@ -92,11 +97,13 @@ export const Login = () => {
           {errors.email?.message && (
             <FormError errorMessage={errors.email?.message} />
           )}
+          {errors.email?.type === "pattern" && (
+            <FormError errorMessage="Please enter a valid email" />
+          )}
           <div>
             <input
               ref={register({
                 required: "Password is required",
-                // minLength: MIN_PASSWORD_LEN,
               })}
               name="password"
               type="password"
@@ -106,11 +113,6 @@ export const Login = () => {
           </div>
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
-          )}
-          {errors.password?.type === "minLength" && (
-            <FormError
-              errorMessage={`Password must be more than ${MIN_PASSWORD_LEN} chars.`}
-            />
           )}
           <Button
             canClick={formState.isValid}
