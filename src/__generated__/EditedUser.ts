@@ -10,4 +10,5 @@
 export interface EditedUser {
   __typename: "User";
   email: string;
+  verified: boolean;
 }
