@@ -51,7 +51,7 @@ export const Search = () => {
   return (
     <div>
       <Helmet>
-        <title>Search '{term}' | Nuber Eats</title>
+        <title>{`Search '${term}' | Nuber Eats`}</title>
       </Helmet>
       <h1>
         Search : {term} ({data?.searchRestaurant.totalResults} results)

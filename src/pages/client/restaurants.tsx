@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Category } from "../../components/category";
 import { Restaurant } from "../../components/restaurant";
-import { RESTAURANT_FRAGMENT } from "../../fragments";
+import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 import {
   restaurantsPageQuery,
   restaurantsPageQueryVariables,
@@ -17,11 +17,7 @@ const RESTAURANTS_QUERY = gql`
       ok
       error
       categories {
-        id
-        name
-        coverImg
-        slug
-        restaurantCount
+        ...CategoryParts
       }
     }
     restaurants(input: $input) {
@@ -34,6 +30,7 @@ const RESTAURANTS_QUERY = gql`
       }
     }
   }
+  ${CATEGORY_FRAGMENT}
   ${RESTAURANT_FRAGMENT}
 `;
 
@@ -90,6 +87,7 @@ export const Restaurants = () => {
                 id={category.id + ""}
                 name={category.name}
                 coverImg={category.coverImg}
+                slug={category.slug}
               />
             ))}
           </div>
