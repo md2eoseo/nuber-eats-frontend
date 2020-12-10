@@ -1,7 +1,9 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import React, { useState } from "react";
-import { Helmet } from "react-helmet";
+import { gql, useLazyQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useHistory, useLocation } from "react-router-dom";
 import { Restaurant } from "../../components/restaurant";
+import { RESTAURANT_FRAGMENT } from "../../fragments";
 import {
   searchRestaurantQuery,
   searchRestaurantQueryVariables,
@@ -15,32 +17,35 @@ const SEARCH_RESTAURANT_QUERY = gql`
       totalPages
       totalResults
       restaurants {
-        id
-        name
-        coverImg
-        address
-        category {
-          name
-        }
-        isPromoted
+        ...RestaurantParts
       }
     }
   }
+  ${RESTAURANT_FRAGMENT}
 `;
+
 export const Search = () => {
   const [page, setPage] = useState(1);
-  const term = window.location.href.split("term=")[1];
-  const { data, loading } = useQuery<
+  const location = useLocation();
+  const [_, term] = location.search.split("?term=");
+  const history = useHistory();
+  const [callQuery, { data }] = useLazyQuery<
     searchRestaurantQuery,
     searchRestaurantQueryVariables
-  >(SEARCH_RESTAURANT_QUERY, {
-    variables: {
-      input: {
-        page,
-        query: term,
+  >(SEARCH_RESTAURANT_QUERY);
+  useEffect(() => {
+    if (!term) {
+      return history.replace("/");
+    }
+    callQuery({
+      variables: {
+        input: {
+          page,
+          query: term,
+        },
       },
-    },
-  });
+    });
+  }, [history, location]);
   const onNextPageClick = () => setPage((current) => current + 1);
   const onPrevPageClick = () => setPage((current) => current - 1);
   return (
