@@ -45,7 +45,7 @@ export const Search = () => {
         },
       },
     });
-  }, [history, location]);
+  }, [history, location, page]);
   const onNextPageClick = () => setPage((current) => current + 1);
   const onPrevPageClick = () => setPage((current) => current - 1);
   return (
