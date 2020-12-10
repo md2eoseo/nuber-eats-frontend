@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { useState } from "react";
+import { Category } from "../../components/category";
 import { Restaurant } from "../../components/restaurant";
 import {
   restaurantsPageQuery,
@@ -65,18 +66,12 @@ export const Restaurants = () => {
         <div className="max-w-screen-2xl pb-20 mx-auto mt-8">
           <div className="max-w-sm mx-auto py-8 flex justify-around">
             {data?.allCategories.categories?.map((category) => (
-              <div
+              <Category
                 key={category.id}
-                className="group flex flex-col items-center cursor-pointer"
-              >
-                <div
-                  className="w-20 h-20 rounded-full bg-cover group-hover:bg-gray-100"
-                  style={{ backgroundImage: `url(${category.coverImg})` }}
-                ></div>
-                <span className="mt-1 text-sm text-center font-medium">
-                  {category.name}
-                </span>
-              </div>
+                id={category.id + ""}
+                name={category.name}
+                coverImg={category.coverImg}
+              />
             ))}
           </div>
           <div className="grid mt-16 grid-cols-3 gap-x-5 gap-y-10 px-12">
