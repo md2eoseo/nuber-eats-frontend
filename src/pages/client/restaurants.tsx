@@ -1,5 +1,8 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import { Category } from "../../components/category";
 import { Restaurant } from "../../components/restaurant";
 import {
@@ -39,6 +42,10 @@ const RESTAURANTS_QUERY = gql`
   }
 `;
 
+interface IFormProps {
+  term: string;
+}
+
 export const Restaurants = () => {
   const [page, setPage] = useState(1);
   const { data, loading } = useQuery<
@@ -53,11 +60,28 @@ export const Restaurants = () => {
   });
   const onNextPageClick = () => setPage((current) => current + 1);
   const onPrevPageClick = () => setPage((current) => current - 1);
+  const { register, handleSubmit, getValues } = useForm<IFormProps>();
+  const history = useHistory();
+  const onSearchSubmit = () => {
+    const { term } = getValues();
+    history.push({
+      pathname: "/search",
+      search: `?term=${term}`,
+    });
+  };
   return (
     <div>
-      <form className="bg-gray-800 w-full py-40 flex justify-center items-center">
+      <Helmet>
+        <title>Home | Nuber Eats</title>
+      </Helmet>
+      <form
+        onSubmit={handleSubmit(onSearchSubmit)}
+        className="bg-gray-800 w-full py-40 flex justify-center items-center"
+      >
         <input
-          className="input w-3/12 rounded-md border-0"
+          ref={register({ required: true, min: 3 })}
+          name="term"
+          className="input w-3/4 md:w-3/12 rounded-md border-0"
           type="Search"
           placeholder="Search restaurants..."
         />
@@ -74,7 +98,7 @@ export const Restaurants = () => {
               />
             ))}
           </div>
-          <div className="grid mt-16 grid-cols-3 gap-x-5 gap-y-10 px-12">
+          <div className="grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10 px-4 md:px-12">
             {data?.restaurants.results?.map((restaurant) => (
               <Restaurant
                 key={restaurant.id}
