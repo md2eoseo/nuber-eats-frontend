@@ -5,30 +5,24 @@ import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Restaurant } from "../pages/client/restaurant";
 import { Restaurants } from "../pages/client/restaurants";
+import { MyRestaurants } from "../pages/owner/myRestaurants";
 import { Search } from "../pages/client/search";
 import { SearchCategory } from "../pages/client/searchCategory";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 
-const ClientRoutes = [
-  <Route key={1} path="/" exact>
-    <Restaurants />
-  </Route>,
-  <Route key={2} path="/confirm">
-    <ConfirmEmail />
-  </Route>,
-  <Route key={3} path="/edit-profile">
-    <EditProfile />
-  </Route>,
-  <Route key={4} path="/search">
-    <Search />
-  </Route>,
-  <Route key={5} path="/category/:slug">
-    <SearchCategory />
-  </Route>,
-  <Route key={6} path="/restaurant/:id">
-    <Restaurant />
-  </Route>,
+const clientRoutes = [
+  { path: "/", component: <Restaurants />, exact: true },
+  { path: "/search", component: <Search /> },
+  { path: "/category/:slug", component: <SearchCategory /> },
+  { path: "/restaurant/:id", component: <Restaurant /> },
+];
+
+const ownerRoutes = [{ path: "/", component: <MyRestaurants />, exact: true }];
+
+const userRoutes = [
+  { path: "/confirm", component: <ConfirmEmail /> },
+  { path: "/edit-profile", component: <EditProfile /> },
 ];
 
 export const LoggedInRouter = () => {
@@ -44,7 +38,23 @@ export const LoggedInRouter = () => {
     <Router>
       <Header />
       <Switch>
-        {data.me.role === "Client" && ClientRoutes}
+        {data.me.role === "Client" &&
+          clientRoutes.map((route) => (
+            <Route key={route.path} path={route.path} exact={route.exact}>
+              {route.component}
+            </Route>
+          ))}
+        {data.me.role === "Owner" &&
+          ownerRoutes.map((route) => (
+            <Route key={route.path} path={route.path} exact={route.exact}>
+              {route.component}
+            </Route>
+          ))}
+        {userRoutes.map((route) => (
+          <Route key={route.path} path={route.path}>
+            {route.component}
+          </Route>
+        ))}
         <Route>
           <NotFound />
         </Route>
