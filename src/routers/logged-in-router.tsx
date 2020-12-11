@@ -10,6 +10,7 @@ import { Search } from "../pages/client/search";
 import { SearchCategory } from "../pages/client/search-category";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
+import { AddRestaurant } from "../pages/owner/add-restaurant";
 
 const clientRoutes = [
   { path: "/", component: <Restaurants />, exact: true },
@@ -18,7 +19,10 @@ const clientRoutes = [
   { path: "/restaurant/:id", component: <Restaurant /> },
 ];
 
-const ownerRoutes = [{ path: "/", component: <MyRestaurants />, exact: true }];
+const ownerRoutes = [
+  { path: "/", component: <MyRestaurants />, exact: true },
+  { path: "/add-restaurant", component: <AddRestaurant /> },
+];
 
 const userRoutes = [
   { path: "/confirm", component: <ConfirmEmail /> },
