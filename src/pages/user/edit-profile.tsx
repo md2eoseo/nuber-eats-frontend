@@ -2,7 +2,6 @@ import { gql, useApolloClient, useMutation } from "@apollo/client";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Redirect } from "react-router-dom";
 import { Button } from "../../components/button";
 import { LOCALSTORAGE_TOKEN } from "../../constants";
 import { useMe } from "../../hooks/useMe";

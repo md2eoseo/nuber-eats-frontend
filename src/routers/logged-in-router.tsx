@@ -5,9 +5,9 @@ import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Restaurant } from "../pages/client/restaurant";
 import { Restaurants } from "../pages/client/restaurants";
-import { MyRestaurants } from "../pages/owner/myRestaurants";
+import { MyRestaurants } from "../pages/owner/my-restaurants";
 import { Search } from "../pages/client/search";
-import { SearchCategory } from "../pages/client/searchCategory";
+import { SearchCategory } from "../pages/client/search-category";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 
