@@ -37,7 +37,6 @@ export const Restaurant = () => {
       },
     }
   );
-  console.log(data);
   return (
     <div className="bg-gray-400">
       <Helmet>

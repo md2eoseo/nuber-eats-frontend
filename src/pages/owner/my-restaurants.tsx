@@ -7,7 +7,7 @@ import { RESTAURANT_FRAGMENT } from "../../fragments";
 import { myRestaurantsQuery } from "../../__generated__/myRestaurantsQuery";
 import { Link } from "react-router-dom";
 
-const MY_RESTAURANTS_QUERY = gql`
+export const MY_RESTAURANTS_QUERY = gql`
   query myRestaurantsQuery {
     myRestaurants {
       ok
@@ -37,16 +37,17 @@ export const MyRestaurants = () => {
             </div>
           </Link>
           {data?.myRestaurants.results?.map((restaurant) => (
-            <div
-              key={restaurant.id}
-              style={{ backgroundImage: `url(${restaurant.coverImg})` }}
-              className="w-full h-48 rounded-lg bg-cover bg-center relative transform transition-transform hover:-translate-y-4 border border-black overflow-hidden"
-            >
-              <div className="absolute w-full bottom-0 bg-white flex justify-between items-baseline p-4 m-0">
-                <span className="text-xl">{restaurant.name}</span>
-                <span>{restaurant.category?.name}</span>
+            <Link key={restaurant.id} to={`/restaurant/${restaurant.id}`}>
+              <div
+                style={{ backgroundImage: `url(${restaurant.coverImg})` }}
+                className="w-full h-48 rounded-lg bg-cover bg-center relative transform transition-transform hover:-translate-y-4 border border-black overflow-hidden"
+              >
+                <div className="absolute w-full bottom-0 bg-white flex justify-between items-baseline p-4 m-0">
+                  <span className="text-xl">{restaurant.name}</span>
+                  <span>{restaurant.category?.name}</span>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

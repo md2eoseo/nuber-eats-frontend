@@ -12,6 +12,7 @@ import { CreateRestaurantInput } from "./globalTypes";
 export interface addRestaurantMutation_createRestaurant {
   __typename: "CreateRestaurantOutput";
   ok: boolean;
+  restaurantId: number;
   error: string | null;
 }
 
