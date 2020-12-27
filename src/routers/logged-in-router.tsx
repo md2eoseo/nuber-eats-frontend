@@ -11,6 +11,7 @@ import { SearchCategory } from "../pages/client/search-category";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 import { AddRestaurant } from "../pages/owner/add-restaurant";
+import { MyRestaurant } from "../pages/owner/my-restaurant";
 
 const clientRoutes = [
   { path: "/", component: <Restaurants />, exact: true },
@@ -22,6 +23,7 @@ const clientRoutes = [
 const ownerRoutes = [
   { path: "/", component: <MyRestaurants />, exact: true },
   { path: "/add-restaurant", component: <AddRestaurant /> },
+  { path: "/restaurant/:id", component: <MyRestaurant /> },
 ];
 
 const userRoutes = [
