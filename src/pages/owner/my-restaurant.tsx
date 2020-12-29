@@ -86,9 +86,18 @@ export const MyRestaurant = () => {
             <div className="grid mt=16 md:grid-cols-3 gap-x-5 gap-y-10">
               {data?.myRestaurant.restaurant?.menu?.map((dish) => (
                 <Dish
+                  key={dish.id}
+                  id={dish.id}
                   name={dish.name}
                   price={dish.price}
                   description={dish.description}
+                  // I want to remove those useless props
+                  addItem={() => {}}
+                  removeItem={() => {}}
+                  toggleItemOption={() => {}}
+                  hasOption={() => {
+                    return false;
+                  }}
                 />
               ))}
             </div>
