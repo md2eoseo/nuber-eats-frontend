@@ -1,7 +1,7 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Dish } from "../../components/dish";
 import { RESTAURANT_FRAGMENT, DISH_FRAGMENT } from "../../fragments";
 import {
@@ -39,6 +39,7 @@ const CREATE_ORDER_MUTATION = gql`
     createOrder(input: $input) {
       ok
       error
+      orderId
     }
   }
 `;
@@ -89,15 +90,24 @@ export const Restaurant = () => {
       if (hasOption(dishId, option)) {
         newItem = { dishId, options: prevOptions };
       } else {
-        newItem = { dishId, options: [option, ...prevOptions] };
+        newItem = { dishId, options: [{ name: option.name }, ...prevOptions] };
       }
       return [newItem, ...current.filter((item) => item.dishId !== dishId)];
     });
   };
+  const history = useHistory();
+  const onCompleted = (data: createOrder) => {
+    const {
+      createOrder: { ok, orderId },
+    } = data;
+    if (ok) {
+      history.push(`/orders/${orderId}`);
+    }
+  };
   const [createOrderMutation, { loading: placingOrder }] = useMutation<
     createOrder,
     createOrderVariables
-  >(CREATE_ORDER_MUTATION);
+  >(CREATE_ORDER_MUTATION, { onCompleted });
   const sendOrder = () => {
     if (items.length === 0) {
       alert("Can't place empty order");
@@ -147,7 +157,9 @@ export const Restaurant = () => {
         </div>
       </div>
       <div className="my-5">
-        <button className="btn px-10 mr-3 mb-3">Send Order</button>
+        <button onClick={sendOrder} className="btn px-10 mr-3 mb-3">
+          Send Order
+        </button>
         {data?.restaurant.restaurant?.menu?.length === 0 ? (
           <h4 className="text-xl mb-5">Please upload a dish!</h4>
         ) : (
