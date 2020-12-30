@@ -41,7 +41,6 @@ export const Login = () => {
       login: { ok, token },
     } = data;
     if (ok && token) {
-      console.log(token);
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       authTokenVar(token);
       isLoggedInVar(true);
