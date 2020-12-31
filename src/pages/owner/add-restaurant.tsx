@@ -84,10 +84,13 @@ export const AddRestaurant = () => {
       const formBody = new FormData();
       formBody.append("file", actualFile);
       const { url: coverImg } = await (
-        await fetch("http://localhost:4000/uploads/", {
-          method: "POST",
-          body: formBody,
-        })
+        await fetch(
+          "https://nuber-eats-backend-2eoseo.herokuapp.com/uploads/",
+          {
+            method: "POST",
+            body: formBody,
+          }
+        )
       ).json();
       setImageUrl(coverImg);
       addRestaurant({
