@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
-import { GOOGLE_MAPS_API_KEY } from "../../constants";
 import { gql, useMutation, useSubscription } from "@apollo/client";
 import { FULL_ORDER_FRAGMENT } from "../../fragments";
 import { cookedOrders } from "../../__generated__/cookedOrders";
@@ -151,7 +150,7 @@ export const Dashboard = () => {
             lat: 36.58,
             lng: 125.95,
           }}
-          bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
+          bootstrapURLKeys={{ key: `${process.env.GOOGLE_MAPS_API_KEY}` }}
         >
           <Driver lat={driverCoords.lat} lng={driverCoords.lng} />
         </GoogleMapReact>
