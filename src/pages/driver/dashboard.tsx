@@ -135,8 +135,12 @@ export const Dashboard = () => {
       },
     });
   };
+
   return (
     <div>
+      <button onClick={() => console.log(process.env.GOOGLE_MAPS_API_KEY)}>
+        api key
+      </button>
       <div
         className="overflow-hidden"
         style={{ width: window.innerWidth, height: "50vh" }}
